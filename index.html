@@ -304,200 +304,198 @@
     })();
     </script>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script>
-        // API KEY - Por favor asegúrate de que sea válida
-        const apiKey = "AIzaSyDStALLNftVdCGfr79u1h7S4-8_rt0x57E";
+<script>
+    // 1. LÓGICA DE LA GALERÍA
+    (function() {
+        const galleryImages = [
+            "20250208_154159.jpg", "20250419_175923.jpg", "20250419_172945.jpg",
+            "20250718_131417.jpg", "20250718_151714.jpg", "20250821_180420.jpg",
+            "20250821_181043.jpg", "IMG-20250914-WA0022.jpg", "IMG-20251108-WA0020.jpg"
+        ];
+        const galleryGrid = document.getElementById("galleryGrid");
+        if (!galleryGrid) return;
+        
+        galleryImages.forEach((src, idx) => {
+            const wrapper = document.createElement("div");
+            wrapper.className = "photo-frame"; 
+            const rotations = ["rotate-1","-rotate-2","rotate-3","-rotate-1","rotate-2","-rotate-3","rotate-1","-rotate-2","rotate-3"];
+            if (rotations[idx]) wrapper.className += " transform " + rotations[idx];
 
-        let player;
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '80', // Lo hacemos visible pero pequeño
-                width: '140',
-                videoId: '450p7goxZqg', // All of Me
-                playerVars: { 
-                    'autoplay': 0, 
-                    'controls': 1, 
-                    'rel': 0, 
-                    'modestbranding': 1,
-                    'origin': window.location.origin
-                },
-                events: {
-                    'onReady': (event) => { console.log("Reproductor listo"); }
-                }
-            });
-        }
+            const img = document.createElement("img");
+            img.loading = "lazy";
+            img.src = src;
+            img.alt = "Foto nuestra";
+            img.onerror = function() {
+                if (wrapper.parentNode) wrapper.parentNode.removeChild(wrapper);
+            };
+            img.onload = function() {
+                img.style.display = "block";
+                img.style.width = "100%";
+                img.style.height = "auto";
+                img.style.objectFit = "cover";
+                img.style.maxHeight = "400px";
+            };
+            wrapper.appendChild(img);
+            galleryGrid.appendChild(wrapper);
+        });
+    })();
 
-        function start() {
-            // Quitar pantalla de inicio
-            document.getElementById('welcome').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('welcome').remove();
-                document.getElementById('musicContainer').classList.remove('hidden');
-            }, 800);
-            
-            // Intentar reproducir música
+    // 2. LÓGICA DE MÚSICA (YOUTUBE)
+    // Carga asíncrona de la API de IFrame
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    let player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            height: '80', 
+            width: '140',
+            videoId: '450p7goxZqg', // ID del video
+            playerVars: { 
+                'autoplay': 0, 
+                'controls': 1, 
+                'rel': 0, 
+                'modestbranding': 1,
+                'origin': window.location.origin
+            },
+            events: {
+                'onReady': (event) => { console.log("Reproductor listo"); }
+            }
+        });
+    }
+
+    // Función del botón de inicio
+    function start() {
+        const welcome = document.getElementById('welcome');
+        welcome.style.opacity = '0';
+        setTimeout(() => {
+            welcome.remove();
+            document.getElementById('musicContainer').classList.remove('hidden');
             if(player && player.playVideo) {
                 player.playVideo();
             }
+        }, 800);
+    }
+
+    // 3. LÓGICA DE CORAZONES
+    function lanzarCorazones() {
+        const container = document.getElementById('hearts');
+        const icons = ['❤️', '💖', '🎂', '✨', '🌊', '📈', '✈️'];
+        for(let i=0; i<80; i++) {
+            setTimeout(() => {
+                const h = document.createElement('div');
+                h.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+                h.className = 'absolute text-4xl animate__animated animate__fadeOutUp';
+                h.style.left = Math.random() * 100 + 'vw';
+                h.style.bottom = '0vh';
+                h.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                container.appendChild(h);
+                setTimeout(() => h.remove(), 4500);
+            }, i * 60);
+        }
+    }
+
+    // 4. LÓGICA DE GEMINI (IA)
+    // ---------------------------------------------------------
+    // ¡ATENCIÓN FELIPE! PEGA TU API KEY AQUÍ ABAJO ENTRE LAS COMILLAS
+    const apiKey = "AQUI_PEGA_TU_CLAVE_QUE_EMPIEZA_POR_AIza"; 
+    // ---------------------------------------------------------
+
+    async function callGemini(userQuery, systemPrompt) {
+        if (!apiKey || apiKey.includes("AQUI_PEGA")) {
+            alert("¡Felipe! Falta configurar la API Key en el código para que la magia funcione.");
+            return "Falta configurar la llave mágica.";
         }
 
-        function lanzarCorazones() {
-            const container = document.getElementById('hearts');
-            const icons = ['❤️', '💖', '🎂', '✨', '🌊', '📈', '✈️'];
-            for(let i=0; i<80; i++) {
-                setTimeout(() => {
-                    const h = document.createElement('div');
-                    h.innerHTML = icons[Math.floor(Math.random() * icons.length)];
-                    h.className = 'absolute text-4xl animate__animated animate__fadeOutUp';
-                    h.style.left = Math.random() * 100 + 'vw';
-                    h.style.bottom = '0vh';
-                    h.style.animationDuration = (Math.random() * 2 + 3) + 's';
-                    container.appendChild(h);
-                    setTimeout(() => h.remove(), 4500);
-                }, i * 60);
-            }
-        }
-    </script>
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+        
+        const payload = {
+            contents: [{ parts: [{ text: userQuery }] }],
+            systemInstruction: { parts: [{ text: systemPrompt }] }
+        };
 
-    <script>
-        // CONFIGURACIÓN DE IA Y API
-        const apiKey = ""; // La plataforma inyectará la clave automáticamente
-
-        async function callGemini(userQuery, systemPrompt) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
             
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] }
-            };
-
-            // Implementación de Exponential Backoff para robustez
-            for (let i = 0; i < 5; i++) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    
-                    const data = await response.json();
-                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "La magia se tomó un respiro, ¡intenta de nuevo!";
-                } catch (error) {
-                    if (i === 4) return "Mi amor, parece que la conexión está débil en este momento. ¡Pero mi amor por ti sigue intacto!";
-                    await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
-                }
-            }
+            if (!response.ok) throw new Error('Error en la API');
+            
+            const data = await response.json();
+            return data.candidates?.[0]?.content?.parts?.[0]?.text || "La magia está recargando...";
+        } catch (error) {
+            console.error(error);
+            return "Mi amor, la conexión a la magia falló un poquito, pero te amo infinito. (Intenta de nuevo en unos segundos)";
         }
+    }
 
-        // LÓGICA DE INTERFAZ
-        let player;
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '80',
-                width: '140',
-                videoId: '450p7goxZqg', // John Legend - All of Me
-                playerVars: { 'autoplay': 0, 'controls': 1, 'modestbranding': 1 },
-                events: { 'onReady': () => console.log("Música lista") }
+    // Eventos de los botones IA
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // Botón Carta
+        const btnLetter = document.getElementById('generate-letter');
+        if(btnLetter) {
+            btnLetter.addEventListener('click', async () => {
+                const resDiv = document.getElementById('letter-result');
+                btnLetter.disabled = true;
+                btnLetter.innerHTML = '✨ Escribiendo con amor...';
+                
+                const text = await callGemini(
+                    "Escribe un mensaje corto y muy tierno para Katerine por sus 25 años y 4 años de novios. Ella está en España y yo la extraño. Menciona que soy Felipe.",
+                    "Eres el novio más romántico. Sé dulce, emotivo y breve (máximo 3 párrafos)."
+                );
+                
+                resDiv.innerHTML = text.replace(/\n/g, '<br>');
+                resDiv.classList.remove('hidden');
+                btnLetter.innerHTML = 'Generar Otro Mensaje ✨';
+                btnLetter.disabled = false;
             });
         }
 
-        function start() {
-            const welcome = document.getElementById('welcome');
-            welcome.style.opacity = '0';
-            setTimeout(() => {
-                welcome.remove();
-                document.getElementById('musicContainer').classList.remove('hidden');
-                if(player && player.playVideo) player.playVideo();
-            }, 800);
+        // Botón Tutor Economía
+        const btnTutor = document.getElementById('ask-tutor');
+        if(btnTutor) {
+            btnTutor.addEventListener('click', async () => {
+                const input = document.getElementById('tutor-input').value;
+                if(!input) return;
+                const resDiv = document.getElementById('tutor-result');
+                
+                btnTutor.disabled = true;
+                btnTutor.innerHTML = '🤔 Pensando...';
+                
+                const text = await callGemini(input, "Eres un tutor de Economía de la Universidad Nacional amoroso. Explica conceptos complejos de forma sencilla a tu novia Katerine. Usa emojis.");
+                
+                resDiv.innerHTML = text.replace(/\n/g, '<br>');
+                resDiv.classList.remove('hidden');
+                btnTutor.innerHTML = 'Explicar con amor ✨';
+                btnTutor.disabled = false;
+            });
         }
 
-        function lanzarCorazones() {
-            const container = document.getElementById('hearts');
-            const icons = ['❤️', '💖', '🎂', '✨', '🌊', '📈', '✈️'];
-            for(let i=0; i<80; i++) {
-                setTimeout(() => {
-                    const h = document.createElement('div');
-                    h.innerHTML = icons[Math.floor(Math.random() * icons.length)];
-                    h.className = 'absolute text-4xl animate__animated animate__fadeOutUp';
-                    h.style.left = Math.random() * 100 + 'vw';
-                    h.style.bottom = '0vh';
-                    h.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                    container.appendChild(h);
-                    setTimeout(() => h.remove(), 4000);
-                }, i * 50);
-            }
+        // Botón Viaje
+        const btnTrip = document.getElementById('generate-trip');
+        if(btnTrip) {
+            btnTrip.addEventListener('click', async () => {
+                const resDiv = document.getElementById('trip-result');
+                btnTrip.disabled = true;
+                btnTrip.innerHTML = '🌊 Soñando...';
+                
+                const text = await callGemini(
+                    "Describe nuestro primer día perfecto en el mar Caribe. Comida, playa y atardecer.",
+                    "Eres un planificador de sueños románticos. Describe un itinerario mágico y relajante para Felipe y Katerine."
+                );
+                
+                resDiv.innerHTML = text.replace(/\n/g, '<br>');
+                resDiv.classList.remove('hidden');
+                btnTrip.innerHTML = 'Re-imaginar Atardecer ✨';
+                btnTrip.disabled = false;
+            });
         }
-
-        // EVENTOS DE IA
-        document.getElementById('generate-letter').addEventListener('click', async () => {
-            const btn = document.getElementById('generate-letter');
-            const resDiv = document.getElementById('letter-result');
-            btn.disabled = true;
-            btn.innerHTML = '✨ Escribiendo...';
-            
-            const text = await callGemini(
-                "Escribe un mensaje muy tierno para Katerine por sus 25 años y 4 años de novios. Ella está en España y yo la extraño. Sé creativo y dulce.",
-                "Eres Felipe, el novio más romántico. Llama a Katerine: mi amor, mi niña piciosa, mi cielo. Sé emotivo sobre la distancia y el futuro juntos."
-            );
-            
-            resDiv.innerHTML = text.replace(/\n/g, '<br>');
-            resDiv.classList.remove('hidden');
-            btn.innerHTML = 'Generar Otro Mensaje ✨';
-            btn.disabled = false;
-        });
-
-        document.getElementById('ask-tutor').addEventListener('click', async () => {
-            const input = document.getElementById('tutor-input').value;
-            if(!input) return;
-            const btn = document.getElementById('ask-tutor');
-            const resDiv = document.getElementById('tutor-result');
-            
-            btn.disabled = true;
-            btn.innerHTML = '🤔 Pensando...';
-            
-            const text = await callGemini(input, "Eres un tutor de Economía de la UNAL. Explica conceptos de economía a Katerine de forma sencilla y amorosa. Usa analogías dulces. Dile mi amor, mi futura economista estrella.");
-            
-            resDiv.innerHTML = text.replace(/\n/g, '<br>');
-            resDiv.classList.remove('hidden');
-            btn.innerHTML = 'Explicar con amor ✨';
-            btn.disabled = false;
-        });
-
-        document.getElementById('generate-trip').addEventListener('click', async () => {
-            const btn = document.getElementById('generate-trip');
-            const resDiv = document.getElementById('trip-result');
-            
-            btn.disabled = true;
-            btn.innerHTML = '🏖️ Planeando...';
-            
-            const text = await callGemini(
-                "Imagina un día perfecto en el mar para nosotros.",
-                "Eres Felipe planeando el primer viaje al mar con Katerine. Describe el amanecer, la comida costeña y el atardecer frente al mar."
-            );
-            
-            resDiv.innerHTML = text.replace(/\n/g, '<br>');
-            resDiv.classList.remove('hidden');
-            btn.innerHTML = 'Re-imaginar Atardecer ✨';
-            btn.disabled = false;
-        });
-
-        function surpise() {
-            const container = document.getElementById('hearts');
-            for(let i=0; i<50; i++) {
-                setTimeout(() => {
-                    const h = document.createElement('div');
-                    h.innerHTML = '❤️';
-                    h.className = 'absolute text-3xl animate__animated animate__fadeOutUp';
-                    h.style.left = Math.random() * 100 + 'vw';
-                    h.style.bottom = '0vh';
-                    container.appendChild(h);
-                    setTimeout(() => h.remove(), 3000);
-                }, i * 100);
-            }
-        }
+    });
     </script>
     
 </body>
