@@ -136,7 +136,7 @@
                 <div class="glass-card p-8 rounded-3xl text-center shadow-md">
                     <div class="text-4xl mb-4">🧠</div>
                     <h4 class="font-bold text-xl mb-2">Tu Inteligencia</h4>
-                    <p class="text-gray-600 italic">Me encanta cómo ves el mundo y la pasión y la motivación que le pones a tus objetivos, me encanta que eres super apasionada por la lectura y aprender todos los días algo nuevo.</p>
+                    <p class="text-gray-600 italic">Me encanta cómo ves el mundo y la pasión y la motivación que le pones a tus objetivos, me encanta que eres super apasionada por la lectura y que te gusta aprender todos los días algo nuevo.</p>
                 </div>
                 <div class="glass-card p-8 rounded-3xl text-center shadow-md">
                     <div class="text-4xl mb-4">✨</div>
@@ -146,7 +146,7 @@
                 <div class="glass-card p-8 rounded-3xl text-center shadow-md">
                     <div class="text-4xl mb-4">❤️</div>
                     <h4 class="font-bold text-xl mb-2">Tu Corazón</h4>
-                    <p class="text-gray-600 italic">Tu forma de amar y cuidar a los que te rodean me enamora cada día más. Eres la persona más especial con su familia, amigos y conmigo (Filipin)</p>
+                    <p class="text-gray-600 italic">Tu forma de amar y cuidar a los que te rodean me enamora cada día más. Eres la persona más especial con su familia, amigos y conmigo especialmente.</p>
                 </div>
             </div>
         </div>
@@ -165,8 +165,9 @@
             <div class="bg-white/10 backdrop-blur p-8 rounded-3xl border border-white/20">
                 <p class="text-2xl font-bold italic">¡Mi niña va a llegar muy muy lejos!</p>
             </div>
+            </p>
             <div class="bg-white/10 backdrop-blur p-8 rounded-3xl border border-white/20 mb-8">
-                <h4 class="font-bold mb-4">📚 ¿Dudas con la carrera? Pregúntale a Filipin IA</h4>
+                <h4 class="font-bold mb-4">📚 ¿Alguna pregunta de Economía? Pregúntale a Filipin IA</h4>
                 <input type="text" id="tutor-input" placeholder="Ej: Explícame el equilibrio de Nash..." class="w-full p-3 rounded-xl text-gray-800 mb-4 focus:outline-none">
                 <button id="ask-tutor" class="bg-white text-blue-900 px-6 py-2 rounded-lg font-bold hover:bg-gray-100 transition">Explicar con amor ✨</button>
                 <div id="tutor-result" class="mt-4 text-left text-sm italic hidden bg-white/5 p-4 rounded-xl"></div>
@@ -395,7 +396,7 @@
             const resDiv = document.getElementById('letter-result');
             btn.disabled = true;
             btn.innerHTML = 'Escribiendo...';
-            const text = await callGemini("Escribe un mensaje muy tierno para Katerine por sus 25 años y 4 años de novios.", "Eres un poeta romántico.");
+            const text = await callGemini("Escribe un mensaje muy tierno para Katerine por sus 25 años y 4 años de novios.", "Eres un poeta romántico, habla en primera persona le suelo decir mi amor, mi niña piciosa, no se te vaya mucho la onda con las respuestas.");
             resDiv.innerHTML = text.replace(/\n/g, '<br>');
             resDiv.classList.remove('hidden');
             btn.innerHTML = 'Generar Otro ✨';
@@ -408,7 +409,7 @@
             const btn = document.getElementById('ask-tutor');
             const resDiv = document.getElementById('tutor-result');
             btn.disabled = true;
-            const text = await callGemini(input, "Eres un tutor de Economía de la UNAL. Explica a Katerine de forma amorosa.");
+            const text = await callGemini(input, "Soy un tutor de Economía de la UNAL. Explica a Katerine de forma amorosa. Siempre refierete a ella como mi amor, mi cielito, mi coshita, como le diria yo");
             resDiv.innerHTML = text.replace(/\n/g, '<br>');
             resDiv.classList.remove('hidden');
             btn.disabled = false;
@@ -418,7 +419,7 @@
             const btn = document.getElementById('generate-trip');
             const resDiv = document.getElementById('trip-result');
             btn.disabled = true;
-            const text = await callGemini("Describe un atardecer perfecto en el mar para nosotros, en Santa Marta, has como una especie de posible itinerario.", "Eres un planeador de sueños.");
+            const text = await callGemini("Describe un atardecer perfecto en el mar para nosotros, en Santa Marta, has como una especie de posible itinerario.", "Eres un planeador de sueños, no te pases con mucha palabreria, mejor más planes precisos, hablale como mi amor, mi niña, mi cielo como si fuese yo.");
             resDiv.innerHTML = text.replace(/\n/g, '<br>');
             resDiv.classList.remove('hidden');
             btn.disabled = false;
