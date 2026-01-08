@@ -42,20 +42,7 @@
             background: #ffb6c1; transform: translateX(-50%);
         }
         @media (max-width: 768px) { .timeline-line { left: 20px; } }
-    </style>
-</head>
-<body>
-
-    <!-- Pantalla de Inicio (Necesaria para música) -->
-    <div id="welcome" class="overlay text-center p-6">
-        <h2 class="romantic-font text-6xl mb-6">Hola, mi niña hermosa...</h2>
-        <p class="mb-8 text-xl italic max-w-md">He preparado algo especial para celebrar tus 25 años y nuestros 4 años juntos.</p>
-        <button onclick="start()" class="bg-white text-pink-600 px-12 py-5 rounded-full font-bold shadow-2xl animate-bounce text-xl">
-            ABRIR CON AMOR 💝
-        </button>
-    </div>
-
-/* Asegura que el botón de inicio esté por encima de todo */
+        /* Asegura que el botón de inicio esté por encima de todo */
         .overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #ff4d6d; z-index: 999; display: flex;
@@ -77,7 +64,18 @@
             width: 160px;
             text-align: center;
         }
+    </style>
+</head>
+<body>
 
+    <!-- Pantalla de Inicio (Necesaria para música) -->
+    <div id="welcome" class="overlay text-center p-6">
+        <h2 class="romantic-font text-6xl mb-6">Hola, mi niña hermosa...</h2>
+        <p class="mb-8 text-xl italic max-w-md">He preparado algo especial para celebrar tus 25 años y nuestros 4 años juntos.</p>
+        <button onclick="start()" class="bg-white text-pink-600 px-12 py-5 rounded-full font-bold shadow-2xl animate-bounce text-xl">
+            ABRIR CON AMOR 💝
+        </button>
+    </div>
 
     <!-- SECCIÓN 1: PORTADA -->
     <section class="min-h-screen flex flex-col items-center justify-center text-center p-6 bg-gradient-to-br from-pink-100 via-white to-red-50 relative">
