@@ -403,47 +403,39 @@
     const parte2 = "E3BJuss09amktI"; // Pega aquí la segunda mitad de tu llave nueva
     const apiKey = parte1 + parte2; 
 
-<script>
-async function callGemini(userQuery, systemPrompt) {
-    if (!apiKey || apiKey.trim() === "") {
-        return "❌ Falta la API Key.";
-    }
+    async function callGemini(userQuery, systemPrompt) {
+        // Usamos el endpoint v1beta que es el que acepta systemInstruction
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        
+        const payload = {
+            contents: [{ 
+                role: "user", 
+                parts: [{ text: userQuery }] 
+            }],
+            systemInstruction: { 
+                parts: [{ text: systemPrompt }] 
+            }
+        };
 
-    const url = `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${apiKey}`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            
+            const data = await response.json();
 
-    const payload = {
-        contents: [{
-            role: "user",
-            parts: [{
-                text: `${systemPrompt}\n\n${userQuery}`
-            }]
-        }]
-    };
-
-    try {
-        const response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(payload)
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            console.error("Gemini ERROR:", data);
-            return `❌ Error Gemini: ${data.error?.message || "Desconocido"}`;
+            if (!response.ok) {
+                console.error("Error:", data);
+                return "Mi amor, los duendes del internet están juguetones. ¡Intenta un click más!";
+            }
+            
+            return data.candidates[0].content.parts[0].text;
+        } catch (error) {
+            return "Hubo un pequeño error técnico, pero mi amor por ti sigue intacto.";
         }
-
-        return data.candidates?.[0]?.content?.parts?.[0]?.text || "⚠️ Sin respuesta.";
-
-    } catch (error) {
-        console.error("ERROR de red:", error);
-        return "❌ Error de conexión con Gemini.";
     }
-}
-
 
     // Eventos de los botones IA
     document.addEventListener('DOMContentLoaded', () => {
