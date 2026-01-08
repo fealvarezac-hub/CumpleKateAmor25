@@ -114,17 +114,17 @@
                 <div class="glass-card p-8 rounded-3xl text-center shadow-md">
                     <div class="text-4xl mb-4">🧠</div>
                     <h4 class="font-bold text-xl mb-2">Tu Inteligencia</h4>
-                    <p class="text-gray-600 italic">Me encanta cómo ves el mundo y la pasión que le pones a la economía.</p>
+                    <p class="text-gray-600 italic">Me encanta cómo ves el mundo y la pasión y la motivación que le pones a tus objetivos, me encanta que eres super apasionada por la lectura y aprender todos los días algo nuevo.</p>
                 </div>
                 <div class="glass-card p-8 rounded-3xl text-center shadow-md">
                     <div class="text-4xl mb-4">✨</div>
                     <h4 class="font-bold text-xl mb-2">Tu Resiliencia</h4>
-                    <p class="text-gray-600 italic">Retomar tus estudios en la Nacional demuestra la mujer valiente que eres.</p>
+                    <p class="text-gray-600 italic">Apesar de las posibles caidas que has llegado a tener, eres super resiliente, vuelves y te paras y continuas trabajando duro por tus metas, mi niña.</p>
                 </div>
                 <div class="glass-card p-8 rounded-3xl text-center shadow-md">
                     <div class="text-4xl mb-4">❤️</div>
                     <h4 class="font-bold text-xl mb-2">Tu Corazón</h4>
-                    <p class="text-gray-600 italic">Tu forma de amar y cuidar a los que te rodean me enamora cada día más.</p>
+                    <p class="text-gray-600 italic">Tu forma de amar y cuidar a los que te rodean me enamora cada día más. Eres la persona más especial con su familia, amigos y conmigo (Filipin)</p>
                 </div>
             </div>
         </div>
@@ -134,14 +134,14 @@
     <section class="un-color text-white py-24 px-6 text-center">
         <div class="max-w-4xl mx-auto">
             <div class="mb-6 flex justify-center">
-                <div class="border-2 border-white px-6 py-2 rounded-lg font-black text-xs tracking-widest uppercase">U. Nacional de Colombia</div>
+                <div class="border-2 border-white px-6 py-2 rounded-lg font-black text-xs tracking-widest uppercase">Universidad Nacional de Colombia</div>
             </div>
             <h3 class="romantic-font text-7xl mb-8">Futura Economista 📈</h3>
             <p class="text-2xl leading-relaxed mb-12 font-light opacity-90 italic">
-                "El camino de la Nacho es exigente, pero tú eres brillante. No olvides que aquí tienes a tu fan número uno para estudiar integral, macro o lo que venga."
+                "El camino de la Nacho es exigente, pero tú eres brillante amor. No olvides que aquí tienes a tu fan número uno para ayudarte a estudiar integral, macro (Así no sepa jaja) o lo que venga, juntos podemos cumplir nuestras metas mi cielito."
             </p>
             <div class="bg-white/10 backdrop-blur p-8 rounded-3xl border border-white/20">
-                <p class="text-2xl font-bold italic">¡Vas a lograr todo lo que te propongas, mi cielo!</p>
+                <p class="text-2xl font-bold italic">¡Mi niña va a llegar muy muy lejos!</p>
             </div>
         </div>
     </section>
@@ -307,5 +307,172 @@
             }
         }
     </script>
+
+    <script>
+        // ==========================================
+        // 1. PEGA TU API KEY AQUÍ ABAJO:
+        // ==========================================
+        const apiKey = "AIzaSyDStALLNftVdCGfr79u1h7S4-8_rt0x57E"; // <--- Pégala entre las comillas
+        // ==========================================
+
+        async function callGemini(prompt, systemPrompt) {
+            if (!apiKey) {
+                return "⚠️ No has configurado la API Key en el código. Los botones mágicos necesitan una llave.";
+            }
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || "La magia está descansando, intenta de nuevo.";
+            } catch (error) {
+                return "Error de conexión con la magia.";
+            }
+        }
+
+        // Lógica de los botones (Letra, Tutor, Viaje)
+        document.getElementById('generate-letter').addEventListener('click', async () => {
+            const btn = document.getElementById('generate-letter');
+            const resDiv = document.getElementById('letter-result');
+            btn.disabled = true;
+            btn.innerHTML = 'Escribiendo...';
+            const text = await callGemini("Escribe un mensaje muy tierno para Katerine por sus 25 años y 4 años de novios.", "Eres un poeta romántico.");
+            resDiv.innerHTML = text.replace(/\n/g, '<br>');
+            resDiv.classList.remove('hidden');
+            btn.innerHTML = 'Generar Otro ✨';
+            btn.disabled = false;
+        });
+
+        document.getElementById('ask-tutor').addEventListener('click', async () => {
+            const input = document.getElementById('tutor-input').value;
+            if(!input) return;
+            const btn = document.getElementById('ask-tutor');
+            const resDiv = document.getElementById('tutor-result');
+            btn.disabled = true;
+            const text = await callGemini(input, "Eres un tutor de Economía de la UNAL. Explica a Katerine de forma amorosa.");
+            resDiv.innerHTML = text.replace(/\n/g, '<br>');
+            resDiv.classList.remove('hidden');
+            btn.disabled = false;
+        });
+
+        document.getElementById('generate-trip').addEventListener('click', async () => {
+            const btn = document.getElementById('generate-trip');
+            const resDiv = document.getElementById('trip-result');
+            btn.disabled = true;
+            const text = await callGemini("Describe un atardecer perfecto en el mar para nosotros, en Santa Marta, has como una especie de posible itinerario.", "Eres un planeador de sueños.");
+            resDiv.innerHTML = text.replace(/\n/g, '<br>');
+            resDiv.classList.remove('hidden');
+            btn.disabled = false;
+        });
+
+        function surpise() {
+            const container = document.getElementById('hearts');
+            for(let i=0; i<50; i++) {
+                setTimeout(() => {
+                    const h = document.createElement('div');
+                    h.innerHTML = '❤️';
+                    h.className = 'absolute text-3xl animate__animated animate__fadeOutUp';
+                    h.style.left = Math.random() * 100 + 'vw';
+                    h.style.bottom = '0vh';
+                    container.appendChild(h);
+                    setTimeout(() => h.remove(), 3000);
+                }, i * 100);
+            }
+        }
+    </script>
+
+    <script>
+        // ==========================================
+        // 1. PEGA TU API KEY AQUÍ ABAJO:
+        // ==========================================
+        const apiKey = ""; // <--- Pégala entre las comillas
+        // ==========================================
+
+        async function callGemini(prompt, systemPrompt) {
+            if (!apiKey) {
+                return "⚠️ No has configurado la API Key en el código. Los botones mágicos necesitan una llave.";
+            }
+
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || "La magia está descansando, intenta de nuevo.";
+            } catch (error) {
+                return "Error de conexión con la magia.";
+            }
+        }
+
+        // Lógica de los botones (Letra, Tutor, Viaje)
+        document.getElementById('generate-letter').addEventListener('click', async () => {
+            const btn = document.getElementById('generate-letter');
+            const resDiv = document.getElementById('letter-result');
+            btn.disabled = true;
+            btn.innerHTML = 'Escribiendo...';
+            const text = await callGemini("Escribe un mensaje muy tierno para Katerine por sus 25 años y 4 años de novios.", "Eres un poeta romántico.");
+            resDiv.innerHTML = text.replace(/\n/g, '<br>');
+            resDiv.classList.remove('hidden');
+            btn.innerHTML = 'Generar Otro ✨';
+            btn.disabled = false;
+        });
+
+        document.getElementById('ask-tutor').addEventListener('click', async () => {
+            const input = document.getElementById('tutor-input').value;
+            if(!input) return;
+            const btn = document.getElementById('ask-tutor');
+            const resDiv = document.getElementById('tutor-result');
+            btn.disabled = true;
+            const text = await callGemini(input, "Eres un tutor de Economía de la UNAL. Explica a Katerine de forma amorosa.");
+            resDiv.innerHTML = text.replace(/\n/g, '<br>');
+            resDiv.classList.remove('hidden');
+            btn.disabled = false;
+        });
+
+        document.getElementById('generate-trip').addEventListener('click', async () => {
+            const btn = document.getElementById('generate-trip');
+            const resDiv = document.getElementById('trip-result');
+            btn.disabled = true;
+            const text = await callGemini("Describe un atardecer perfecto en el mar para nosotros.", "Eres un planeador de sueños.");
+            resDiv.innerHTML = text.replace(/\n/g, '<br>');
+            resDiv.classList.remove('hidden');
+            btn.disabled = false;
+        });
+
+        function surpise() {
+            const container = document.getElementById('hearts');
+            for(let i=0; i<50; i++) {
+                setTimeout(() => {
+                    const h = document.createElement('div');
+                    h.innerHTML = '❤️';
+                    h.className = 'absolute text-3xl animate__animated animate__fadeOutUp';
+                    h.style.left = Math.random() * 100 + 'vw';
+                    h.style.bottom = '0vh';
+                    container.appendChild(h);
+                    setTimeout(() => h.remove(), 3000);
+                }, i * 100);
+            }
+        }
+    </script>
+    
 </body>
 </html>
