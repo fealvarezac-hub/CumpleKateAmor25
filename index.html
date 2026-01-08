@@ -110,7 +110,7 @@
                     </p>
                 </div>
             </div>
-        <!-- DEDICATORIA MÁGICA CENTRADA Y AMPLIA -->
+        <!-- DEDICATORIA MÁGICA - REPLICA EXACTA DEL DISEÑO CENTRADO -->
         <div class="max-w-4xl mx-auto">
             <div class="magic-card p-8 md:p-12 rounded-[3rem] shadow-2xl relative overflow-hidden text-center">
                 <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">✨</div>
@@ -121,9 +121,11 @@
                 
                 <div id="letter-result" class="text-gray-800 text-xl italic mb-10 hidden border-t border-purple-200 pt-8 leading-loose text-left bg-white/50 p-6 rounded-2xl"></div>
                 
-                <button id="generate-letter" class="inline-flex items-center justify-center bg-purple-600 text-white px-10 py-4 rounded-full font-bold text-xl hover:bg-purple-700 transition-all shadow-lg transform hover:scale-105">
-                    Generar Mensaje Especial ✨
-                </button>
+                <div class="flex justify-center">
+                    <button id="generate-letter" class="inline-flex items-center justify-center bg-purple-600 text-white px-10 py-4 rounded-full font-bold text-xl hover:bg-purple-700 transition-all shadow-lg transform hover:scale-105">
+                        Generar Mensaje Especial ✨
+                    </button>
+                </div>
             </div>
         </div>
     </section>
@@ -165,7 +167,7 @@
             <div class="bg-white/10 backdrop-blur p-8 rounded-3xl border border-white/20">
                 <p class="text-2xl font-bold italic">¡Mi niña va a llegar muy muy lejos!</p>
             </div>
-            </p></span>
+            </span>
             <div class="bg-white/10 backdrop-blur p-8 rounded-3xl border border-white/20 mb-8">
                 <h4 class="font-bold mb-4">📚 ¿Alguna pregunta de Matemáticas? Pregúntale a Filipin IA</h4>
                 <input type="text" id="tutor-input" placeholder="Ej: ¿Cuál es la diferencia entre una derivada y una integral?..." class="w-full p-3 rounded-xl text-gray-800 mb-4 focus:outline-none">
@@ -358,45 +360,38 @@
         }
     </script>
 
-    <script>
-        // ==========================================
-        // 1. PEGA TU API KEY AQUÍ ABAJO:
-        // ==========================================
-        const apiKey = "AIzaSyDStALLNftVdCGfr79u1h7S4-8_rt0x57E"; // <--- Pégala entre las comillas
-        // ==========================================
+        <script>
+        // API KEY DE GEMINI
+        const GEMINI_API_KEY = "AIzaSyDStALLNftVdCGfr79u1h7S4-8_rt0x57E";
 
+        // Función para llamar a la IA
         async function callGemini(prompt, systemPrompt) {
-            if (!apiKey) {
-                return "⚠️ No has configurado la API Key en el código. Los botones mágicos necesitan una llave.";
-            }
-
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
             
-            const payload = {
-                contents: [{ parts: [{ text: prompt }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] }
-            };
-
             try {
                 const response = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    })
                 });
                 const data = await response.json();
-                return data.candidates?.[0]?.content?.parts?.[0]?.text || "La magia está descansando, intenta de nuevo.";
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || "La magia se tomó un descanso, ¡intenta otra vez!";
             } catch (error) {
-                return "Error de conexión con la magia.";
+                console.error("Error IA:", error);
+                return "Hubo un pequeño error en la conexión mágica, mi amor.";
             }
         }
 
-        // Lógica de los botones (Letra, Tutor, Viaje)
+        // Eventos de los botones IA
         document.getElementById('generate-letter').addEventListener('click', async () => {
             const btn = document.getElementById('generate-letter');
             const resDiv = document.getElementById('letter-result');
             btn.disabled = true;
             btn.innerHTML = 'Escribiendo...';
-            const text = await callGemini("Escribe un mensaje muy tierno para Katerine por sus 25 años y 4 años de novios.", "Eres un poeta romántico, habla en primera persona le suelo decir mi amor, mi niña piciosa, no se te vaya mucho la onda con las respuestas.");
+            const text = await callGemini("Escribe un mensaje muy tierno para Katerine por sus 25 años y 4 años de novios. Menciona que la extraño mucho ahora que está en España.", "Eres un novio súper romántico llamado Felipe. Llama a Katerine: mi amor, mi niña piciosa, mi cielo. Sé muy dulce y emotivo.");
             resDiv.innerHTML = text.replace(/\n/g, '<br>');
             resDiv.classList.remove('hidden');
             btn.innerHTML = 'Generar Otro ✨';
@@ -409,7 +404,7 @@
             const btn = document.getElementById('ask-tutor');
             const resDiv = document.getElementById('tutor-result');
             btn.disabled = true;
-            const text = await callGemini(input, "Soy un tutor de Economía de la UNAL. Explica a Katerine de forma amorosa. Siempre refierete a ella como mi amor, mi cielito, mi coshita, como le diria yo");
+            const text = await callGemini(input, "Eres un tutor de Economía de la UNAL enamorado. Explica conceptos de economía a Katerine de forma sencilla y muy amorosa. Dile mi amor, mi futura economista estrella.");
             resDiv.innerHTML = text.replace(/\n/g, '<br>');
             resDiv.classList.remove('hidden');
             btn.disabled = false;
@@ -419,7 +414,7 @@
             const btn = document.getElementById('generate-trip');
             const resDiv = document.getElementById('trip-result');
             btn.disabled = true;
-            const text = await callGemini("Describe un atardecer perfecto en el mar para nosotros, en Santa Marta, has como una especie de posible itinerario.", "Eres un planeador de sueños, no te pases con mucha palabreria, mejor más planes precisos, hablale como mi amor, mi niña, mi cielo como si fuese yo.");
+            const text = await callGemini("Planea un día perfecto en Santa Marta para nosotros.", "Eres Felipe planeando el primer viaje al mar con su novia Katerine. Sé específico con los planes (playa, comida, atardecer) y muy cariñoso.");
             resDiv.innerHTML = text.replace(/\n/g, '<br>');
             resDiv.classList.remove('hidden');
             btn.disabled = false;
