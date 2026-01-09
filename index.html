@@ -92,6 +92,7 @@
             <div class="inline-block bg-pink-500 text-white px-10 py-3 rounded-full text-2xl font-bold shadow-2xl">
                 25 Años de Magia ✨
             </div>
+            <p class="text-pink-400 font-bold tracking-[0.3em] mb-4 uppercase text-sm"> Poco más de 500 líneas de código en HTML de puro amor por tu Felipin aprendiendo a programar</p>
         </div>
     </section>
 
@@ -155,27 +156,41 @@
     </section>
 
     <!-- SECCIÓN 4: MOTIVACIÓN ECONOMÍA UNAL -->
-    <section class="un-color text-white py-24 px-6 text-center">
-        <div class="max-w-4xl mx-auto">
-            <div class="mb-6 flex justify-center">
-                <div class="border-2 border-white px-6 py-2 rounded-lg font-black text-xs tracking-widest uppercase">Universidad Nacional de Colombia</div>
-            </div>
-            <h3 class="romantic-font text-7xl mb-8">Futura Economista 📈</h3>
-            <p class="text-2xl leading-relaxed mb-12 font-light opacity-90 italic">
-                "El camino de la Nacho es exigente, pero tú eres brillante amor. No olvides que aquí tienes a tu fan número uno para ayudarte a estudiar integral, macro (Así no sepa jaja) o lo que venga, juntos podemos cumplir nuestras metas mi cielito."
-            </p>
-            <div class="bg-white/10 backdrop-blur p-8 rounded-3xl border border-white/20">
-                <p class="text-2xl font-bold italic">¡Mi niña va a llegar muy muy lejos!</p>
-            </div>
-            </span>
-            <div class="bg-white/10 backdrop-blur p-8 rounded-3xl border border-white/20 mb-8">
-                <h4 class="font-bold mb-4">📚 ¿Alguna pregunta de Matemáticas? Pregúntale a Filipin IA</h4>
-                <input type="text" id="tutor-input" placeholder="Ej: ¿Cuál es la diferencia entre una derivada y una integral?..." class="w-full p-3 rounded-xl text-gray-800 mb-4 focus:outline-none">
-                <button id="ask-tutor" class="bg-white text-blue-900 px-6 py-2 rounded-lg font-bold hover:bg-gray-100 transition">Explicar con amor ✨</button>
-                <div id="tutor-result" class="mt-4 text-left text-sm italic hidden bg-white/5 p-4 rounded-xl"></div>
-            </div>
+<section class="un-color text-white py-24 px-6 text-center relative overflow-hidden">
+    <div class="absolute inset-0 z-0 opacity-10" style="background-image: radial-gradient(white, transparent); background-size: 5px 5px;"></div>
+
+    <div class="max-w-4xl mx-auto relative z-10">
+        <div class="mb-6 flex justify-center">
+            <div class="border-2 border-white px-6 py-2 rounded-lg font-black text-xs tracking-widest uppercase">Universidad Nacional de Colombia</div>
         </div>
-    </section>
+        <h3 class="romantic-font text-7xl mb-8">Futura Economista 📈</h3>
+        
+        <p class="text-2xl leading-relaxed mb-12 font-light opacity-90 italic">
+            "El camino de la Nacho es exigente, pero tú eres brillante amor. No olvides que aquí tienes a tu fan número uno para ayudarte a estudiar integral, macro o lo que venga, juntos podemos cumplir nuestras metas mi cielito."
+        </p>
+
+        <div id="greatness-box" class="bg-gradient-to-r from-yellow-400/20 via-white/10 to-yellow-400/20 backdrop-blur-md p-10 rounded-[2.5rem] border-2 border-yellow-300 shadow-[0_0_25px_rgba(253,224,71,0.3)] mb-8 animate__animated animate__pulse animate__infinite animate__slow">
+            <p class="text-3xl md:text-4xl font-black italic text-yellow-200 tracking-tight">
+                🌟 ¡Mi niña va a llegar muy muy lejos! 🌟
+            </p>
+        </div>
+        
+        <button id="confetti-button" class="bg-yellow-300 text-blue-900 px-8 py-4 rounded-full font-bold text-xl shadow-xl hover:bg-yellow-400 transition-all transform hover:scale-105 mb-20 flex items-center justify-center mx-auto">
+            ¡CELEBRAR ÉXITOS! 🎉✨
+        </button>
+
+        <div class="bg-white/5 backdrop-blur-sm p-8 rounded-3xl border border-white/20">
+            <h4 class="font-bold mb-4 text-xl text-pink-200">📚 ¿Alguna duda de la carrera? Pregúntale a tu Filipin IA</h4>
+            <input type="text" id="tutor-input" placeholder="Ej: ¿Qué es el equilibrio de Nash?..." class="w-full p-4 rounded-xl text-gray-800 mb-4 focus:ring-4 focus:ring-yellow-300 outline-none transition-all">
+            <button id="ask-tutor" class="bg-white text-blue-900 px-8 py-3 rounded-full font-bold hover:bg-yellow-300 hover:text-blue-950 transition-all shadow-lg transform hover:scale-105">
+                Explicar con amor ✨
+            </button>
+            <div id="tutor-result" class="mt-6 text-left text-lg italic hidden bg-black/20 p-6 rounded-2xl border-l-4 border-yellow-300 leading-relaxed"></div>
+        </div>
+    </div>
+
+    <div id="confetti-container" class="fixed inset-0 pointer-events-none z-[300]"></div>
+</section>
 
     <!-- SECCIÓN 5: GALERÍA AMPLIADA (se reemplazó por carga dinámica para detectar faltantes) -->
     <section class="py-24 px-6 bg-white">
@@ -333,6 +348,55 @@
             }, i * 60);
         }
     }
+
+// ... (Toda la lógica de lanzarCorazones, etc.)
+
+// NUEVA LÓGICA DE CONFETI Y CELEBRACIÓN
+function launchConfettiAndCelebrate(targetElementId) {
+    const confettiContainer = document.getElementById('confetti-container');
+    const targetElement = document.getElementById(targetElementId);
+    
+    // Animar la frase de grandeza
+    if (targetElement) {
+        targetElement.classList.remove('animate__pulse', 'animate__infinite', 'animate__slow'); // Detener animación anterior
+        targetElement.classList.add('animate__animated', 'animate__headShake'); // Sacudida de celebración
+        setTimeout(() => {
+            targetElement.classList.remove('animate__headShake');
+            // Opcional: Volver a la animación de pulso si lo quieres así
+            // targetElement.classList.add('animate__pulse', 'animate__infinite', 'animate__slow');
+        }, 1000); // Duración de la sacudida
+    }
+
+    // Emojis y Confeti
+    const confettiEmojis = ['🎉', '💖', '✨', '🌟', '🥳', '💛', '🏆'];
+    for (let i = 0; i < 70; i++) { // Más confeti!
+        const c = document.createElement('div');
+        c.innerHTML = confettiEmojis[Math.floor(Math.random() * confettiEmojis.length)];
+        c.className = 'absolute text-4xl animate__animated animate__zoomOutUp'; // Animación de salir volando
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.top = (Math.random() * 10 - 20) + '%'; // Empieza más arriba de la pantalla
+        c.style.opacity = Math.random() * 0.7 + 0.3; // Opacidad variable
+        c.style.transform = `scale(${Math.random() * 0.8 + 0.5}) rotate(${Math.random() * 360}deg)`; // Tamaño y rotación
+        c.style.animationDuration = (Math.random() * 3 + 2) + 's'; // Duración variable
+        c.style.animationDelay = (Math.random() * 0.5) + 's'; // Retraso variable
+        confettiContainer.appendChild(c);
+
+        // Remover el confeti después de su animación
+        setTimeout(() => c.remove(), 5000); 
+    }
+}
+
+// ... (Dentro del document.addEventListener('DOMContentLoaded', () => { ... )
+
+    // --- BOTÓN DE CONFETI ---
+    const btnConfetti = document.getElementById('confetti-button');
+    if(btnConfetti) {
+        btnConfetti.addEventListener('click', () => {
+            launchConfettiAndCelebrate('greatness-box'); // Lanza confeti y anima la caja
+        });
+    }
+
+// ... (El resto de tus EventListeners para los otros botones)
 
 // 4. LÓGICA DE IA (GROQ)
 const p1 = "gsk_RGvOlB21v7ZjGqyaygVzW"; // Asegúrate de que esta sea tu nueva llave
