@@ -446,115 +446,53 @@ function launchConfettiAndCelebrate(targetElementId) {
 
 // ... (El resto de tus EventListeners para los otros botones)
 
-// 4. LÓGICA DE IA (GROQ)
-const p1 = "gsk_RGvOlB21v7ZjGqyaygVzW"; // Asegúrate de que esta sea tu nueva llave
-const p2 = "Gdyb3FYXaVTh8NOSzxKZshUU0pfxAUe"; 
-const GROQ_API_KEY = p1 + p2;
+// --- LÓGICA DE MENSAJES FIJOS (SIN ERRORES) ---
 
-async function callGroq(userQuery, systemPrompt) {
-    const url = "https://api.groq.com/openai/v1/chat/completions";
-    
-    const payload = {
-        model: "llama-3.3-70b-versatile", // <--- ESTE ES EL NOMBRE NUEVO Y ACTUALIZADO
-        messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: userQuery }
-        ],
-        temperature: 0.8
-    };
-
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${GROQ_API_KEY}`
-            },
-            body: JSON.stringify(payload)
-        });
-        
-        const data = await response.json();
-
-        if (!response.ok) {
-            console.error("Error Groq:", data);
-            return "Mi amor, los duendes del internet están juguetones. ¡Intenta un click más!";
+function typeWriter(text, elementId, speed = 30) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+    element.innerHTML = "";
+    element.classList.remove('hidden');
+    let i = 0;
+    function type() {
+        if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
         }
-        
-        return data.choices[0].message.content;
-    } catch (error) {
-        console.error("Error de conexión:", error);
-        return "Hubo un pequeño error técnico, pero mi amor por ti sigue intacto.";
     }
+    type();
 }
 
-// ORGANIZACIÓN DE BOTONES Y EVENTOS
 document.addEventListener('DOMContentLoaded', () => {
-    
-    // --- BOTÓN CARTA ROMÁNTICA ---
+    // 1. Botón de la Carta
     const btnLetter = document.getElementById('generate-letter');
     if(btnLetter) {
-        btnLetter.addEventListener('click', async () => {
-            const resDiv = document.getElementById('letter-result');
-            btnLetter.disabled = true;
-            btnLetter.innerHTML = '✨ Escribiendo con amor...';
-            
-            const text = await callGroq(
-                "Escribe un mensaje corto, tierno y profundo para Katerine. Cumple 25 años, llevamos 4 años juntos. Ella está en España y yo (Felipe) en Colombia extrañándola. Menciona que estoy orgulloso de ella.",
-                "Eres Felipe, el novio más enamorado. Escribe de forma dulce, usa expresiones colombianas suaves si es natural, y sé muy romántico. Máximo 2 párrafos."
-            );
-            
-            resDiv.innerHTML = text.replace(/\n/g, '<br>');
-            resDiv.classList.remove('hidden');
-            btnLetter.innerHTML = 'Generar Otro Mensaje ✨';
-            btnLetter.disabled = false;
+        btnLetter.addEventListener('click', () => {
+            const msj = "Mi niña hermosa, aunque hoy nos separan miles de kilómetros, mi corazón está contigo en España. Estoy tan orgulloso de la mujer en la que te has convertido a tus 25 años. Estos 4 años han sido el mejor viaje de mi vida y no puedo esperar a que estemos juntos de nuevo para celebrar. ¡Te amo infinito! ❤️";
+            btnLetter.innerHTML = "✨ Con todo mi amor";
+            typeWriter(msj, 'letter-result');
         });
     }
 
-    // --- BOTÓN TUTOR DE ECONOMÍA ---
+    // 2. Botón del Tutor de Economía
     const btnTutor = document.getElementById('ask-tutor');
     if(btnTutor) {
-        btnTutor.addEventListener('click', async () => {
-            const input = document.getElementById('tutor-input').value;
-            if(!input) {
-                alert("Dime qué quieres que te explique, mi cielo.");
-                return;
-            }
-            const resDiv = document.getElementById('tutor-result');
-            
-            btnTutor.disabled = true;
-            btnTutor.innerHTML = '🤔 Consultando libros...';
-            
-            const text = await callGroq(
-                input, 
-                "Eres un tutor experto en Economía de la Universidad Nacional de Colombia, dile mi amor, mi niña hermosa, porque eres el novio de la usuaria que consulta. Explícale a tu novia Katerine de forma sencilla, motivadora y clara. Usa emojis de gráficas y finanzas."
-            );
-            
-            resDiv.innerHTML = text.replace(/\n/g, '<br>');
-            resDiv.classList.remove('hidden');
-            btnTutor.innerHTML = 'Explicar con amor ✨';
-            btnTutor.disabled = false;
+        btnTutor.addEventListener('click', () => {
+            const msj = "¡Hola, mi futura economista favorita! 📈 Recuerda que en nuestra relación no hay rendimientos decrecientes, cada día te amo más. Eres la más brillante de la Nacho y vas a lograr todo lo que te propongas en tus clases. ¡Aquí estoy para apoyarte siempre, mi cielo! 📚✨";
+            typeWriter(msj, 'tutor-result');
         });
     }
 
-    // --- BOTÓN PLANIFICADOR DE VIAJE ---
+    // 3. Botón del Viaje al Mar
     const btnTrip = document.getElementById('generate-trip');
     if(btnTrip) {
-        btnTrip.addEventListener('click', async () => {
-            const resDiv = document.getElementById('trip-result');
-            btnTrip.disabled = true;
-            btnTrip.innerHTML = '🌊 Soñando con el mar...';
-            
-            const text = await callGroq(
-                "Describe nuestro primer día perfecto en el mar Caribe. Comida típica, playa de arena blanca y un atardecer abrazados.",
-                "Eres un planeador de sueños. Describe un itinerario mágico, sensorial y romántico para Felipe y Katerine. Usa emojis de mar y sol. Tienen que ser planes realistas que se desarrollen en Santa Marta, Colombia"
-            );
-            
-            resDiv.innerHTML = text.replace(/\n/g, '<br>');
-            resDiv.classList.remove('hidden');
-            btnTrip.innerHTML = 'Re-imaginar Itinerario✨';
-            btnTrip.disabled = false;
+        btnTrip.addEventListener('click', () => {
+            const msj = "Nuestro primer día en el mar será mágico: despertaremos en Santa Marta 🌊, comeremos pescadito frito frente al Caribe y veremos el atardecer abrazados en la arena. ¡Falta muy poco para cumplir este sueño juntos! ✈️🌅";
+            typeWriter(msj, 'trip-result');
         });
-}
+    }
 });
+
 </script> </body>
 </html>
